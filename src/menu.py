@@ -16,7 +16,7 @@ def exibir_menu():
     print("2. Adicionar documento")
     print("3. Renomear documento")
     print("4. Remover documento")
-    print("5. Buscar documento por nome")
+    print("5. Buscar por nome")
     print("6. Resumo por tipo e ano")
     print("7. Sair")
 
