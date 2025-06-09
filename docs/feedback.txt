@@ -1,0 +1,10 @@
+Feedback de Bibliotecários - Simulação
+
+1. "Seria útil uma função para buscar documentos por nome ou parte do nome."
+2. "Gostaria de um resumo com a contagem total de documentos por tipo e ano."
+3. "Seria interessante poder visualizar os documentos recém-adicionados."
+4. "Um comando para visualizar o caminho completo dos arquivos ajudaria muito."
+5. "A interface está clara, mas poderia mostrar as opções numéricas no menu inicial."
+
+Data: 08/06/2025
+Responsável: Simulação de Testes de Usuário
