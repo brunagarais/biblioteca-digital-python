@@ -1,4 +1,5 @@
 import os
+import shutil
 from datetime import datetime
 
 def listar_documentos(caminho_base):
@@ -30,11 +31,6 @@ def listar_documentos(caminho_base):
         print(f"\n📁 {chave}")
         for doc in sorted(documentos[chave]):
             print(f"   └── {doc}")
-# Exemplo de teste (ajuste o caminho conforme necessário)
-if __name__ == "__main__":
-    caminho_para_testar = "../docs"  # Você pode mudar para qualquer pasta com arquivos
-    listar_documentos(caminho_para_testar)
-import shutil
 
 def adicionar_documento(origem, destino_base):
     """
@@ -48,7 +44,6 @@ def adicionar_documento(origem, destino_base):
     ano = datetime.fromtimestamp(os.path.getmtime(origem)).year
 
     destino_final = os.path.join(destino_base, extensao, str(ano))
-
     os.makedirs(destino_final, exist_ok=True)
 
     nome_arquivo = os.path.basename(origem)
@@ -59,11 +54,54 @@ def adicionar_documento(origem, destino_base):
         print(f"✅ Documento movido para: {destino_arquivo}")
     except Exception as e:
         print(f"❌ Erro ao mover o documento: {e}")
+
+def renomear_documento(caminho_arquivo, novo_nome):
+    """
+    Renomeia um documento mantendo-o na mesma pasta.
+    """
+    if not os.path.isfile(caminho_arquivo):
+        print(f"❌ Arquivo '{caminho_arquivo}' não encontrado.")
+        return
+
+    pasta = os.path.dirname(caminho_arquivo)
+    novo_caminho = os.path.join(pasta, novo_nome)
+
+    try:
+        os.rename(caminho_arquivo, novo_caminho)
+        print(f"✅ Documento renomeado para: {novo_caminho}")
+    except Exception as e:
+        print(f"❌ Erro ao renomear o documento: {e}")
+
+def remover_documento(caminho_arquivo):
+    """
+    Remove um documento da biblioteca digital.
+    """
+    if not os.path.isfile(caminho_arquivo):
+        print(f"❌ Arquivo '{caminho_arquivo}' não encontrado.")
+        return
+
+    try:
+        os.remove(caminho_arquivo)
+        print(f"🗑️ Documento removido: {caminho_arquivo}")
+    except Exception as e:
+        print(f"❌ Erro ao remover o documento: {e}")
+
+# Bloco principal com todos os testes
 if __name__ == "__main__":
     caminho_para_testar = "../docs"
     listar_documentos(caminho_para_testar)
 
     # Exemplo: mover um arquivo solto para a biblioteca
-    # Crie um arquivo de teste fora da pasta docs antes de rodar
     arquivo_a_adicionar = "../livro_novo_2022.pdf"
     adicionar_documento(arquivo_a_adicionar, caminho_para_testar)
+
+    # Exemplo: renomear um documento existente
+    print("\n📄 Testando renomear documento...")
+    caminho_antigo = "../docs/pdf/2025/livro_novo_2022.pdf"
+    novo_nome = "livro_renomeado_2022.pdf"
+    renomear_documento(caminho_antigo, novo_nome)
+
+    # Exemplo: remover o documento renomeado
+    print("\n🧹 Testando remoção de documento...")
+    caminho_para_remover = "../docs/pdf/2025/livro_renomeado_2022.pdf"
+    remover_documento(caminho_para_remover)
