@@ -74,7 +74,7 @@ def renomear_documento(caminho_arquivo, novo_nome):
 
 def remover_documento(caminho_arquivo):
     """
-    Remove um documento da biblioteca digital.
+    Remove um documento da biblioteca.
     """
     if not os.path.isfile(caminho_arquivo):
         print(f"❌ Arquivo '{caminho_arquivo}' não encontrado.")
@@ -86,22 +86,46 @@ def remover_documento(caminho_arquivo):
     except Exception as e:
         print(f"❌ Erro ao remover o documento: {e}")
 
-# Bloco principal com todos os testes
-if __name__ == "__main__":
-    caminho_para_testar = "../docs"
-    listar_documentos(caminho_para_testar)
+def buscar_documentos_por_nome(caminho_base, termo):
+    """
+    Busca por documentos cujo nome contenha o termo fornecido (ignorando maiúsculas/minúsculas).
+    """
+    if not os.path.exists(caminho_base):
+        print(f"O diretório '{caminho_base}' não existe.")
+        return
 
-    # Exemplo: mover um arquivo solto para a biblioteca
-    arquivo_a_adicionar = "../livro_novo_2022.pdf"
-    adicionar_documento(arquivo_a_adicionar, caminho_para_testar)
+    encontrados = []
 
-    # Exemplo: renomear um documento existente
-    print("\n📄 Testando renomear documento...")
-    caminho_antigo = "../docs/pdf/2025/livro_novo_2022.pdf"
-    novo_nome = "livro_renomeado_2022.pdf"
-    renomear_documento(caminho_antigo, novo_nome)
+    for raiz, _, arquivos in os.walk(caminho_base):
+        for nome_arquivo in arquivos:
+            if termo.lower() in nome_arquivo.lower():
+                encontrados.append(os.path.join(raiz, nome_arquivo))
 
-    # Exemplo: remover o documento renomeado
-    print("\n🧹 Testando remoção de documento...")
-    caminho_para_remover = "../docs/pdf/2025/livro_renomeado_2022.pdf"
-    remover_documento(caminho_para_remover)
+    if encontrados:
+        print(f"\n🔍 Resultados para '{termo}':")
+        for caminho in encontrados:
+            print(f"   └── {caminho}")
+    else:
+        print(f"🔍 Nenhum documento encontrado com o termo: '{termo}'")
+
+def resumo_documentos(caminho_base):
+    """
+    Exibe um resumo com o total de documentos por tipo (extensão) encontrados na biblioteca.
+    """
+    if not os.path.exists(caminho_base):
+        print(f"O diretório '{caminho_base}' não existe.")
+        return
+
+    resumo = {}
+
+    for raiz, _, arquivos in os.walk(caminho_base):
+        for nome_arquivo in arquivos:
+            extensao = os.path.splitext(nome_arquivo)[1].lower().strip(".")
+            resumo[extensao] = resumo.get(extensao, 0) + 1
+
+    if resumo:
+        print("\n📊 Resumo de documentos por tipo:")
+        for tipo, quantidade in sorted(resumo.items()):
+            print(f"   - {tipo.upper()}: {quantidade} arquivo(s)")
+    else:
+        print("Nenhum documento encontrado.")
